@@ -42,17 +42,6 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
 				return globals;
 			}
 		});
-		globals.define("File", new ICallable() {
-			@Override
-			public int arity() {
-				return 0;
-			}
-			@Override
-			public Object call(Interpreter interpreter,
-					List<Object> arguments) {
-				return new FileInstance(stringify(arguments.get(0)));
-			}
-		});
 	}
 	
 	public static class RuntimeError extends RuntimeException {

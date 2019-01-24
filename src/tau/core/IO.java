@@ -3,6 +3,7 @@ package tau.core;
 import java.util.*;
 import java.io.InputStreamReader;
 import java.io.BufferedReader;
+import java.io.FileReader;
 import java.io.IOException;
 
 import tau.runtime.*;
@@ -15,7 +16,23 @@ public class IO extends ModuleInstance {
 	}
 	
 	public Object get(TToken name) {
-		if(name.lexeme.equals("puts")) {
+		if(name.lexeme.equals("readLine")) {
+			return new ICallable() {
+				public int arity() {
+					return 0;
+				}
+				@Override
+				public Object call(Interpreter interpreter, List<Object> arguments) {
+					try {
+						BufferedReader reader = new BufferedReader(new FileReader(Interpreter.stringify(
+								arguments.get(0))));
+						return reader.readLine();
+					} catch (IOException e) {
+						throw new Interpreter.RuntimeError(name, "Could not get file or read it..");
+					}
+				}
+			};
+		} else if(name.lexeme.equals("puts")) {
 			return new ICallable() {
 				@Override
 				public int arity() {
